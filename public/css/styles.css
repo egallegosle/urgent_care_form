@@ -1,0 +1,281 @@
+/* Mobile-First Responsive Design for Urgent Care Forms */
+
+/* CSS Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #0066cc;
+    --secondary-color: #004d99;
+    --text-color: #333;
+    --border-color: #ccc;
+    --bg-light: #f5f5f5;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --border-radius: 4px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-light);
+    padding: var(--spacing-md);
+}
+
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.form-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.form-header h1 {
+    color: var(--primary-color);
+    font-size: 24px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.form-header p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-section {
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--bg-light);
+    border-radius: var(--border-radius);
+}
+
+.form-section h2 {
+    color: var(--secondary-color);
+    font-size: 18px;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.required {
+    color: var(--error-color);
+}
+
+/* Input Fields - Touch Friendly (minimum 44px height) */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: white;
+    transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Checkboxes and Radio Buttons - Touch Friendly */
+.checkbox-group,
+.radio-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.checkbox-item,
+.radio-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+    min-height: 44px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: var(--spacing-sm);
+    cursor: pointer;
+}
+
+.checkbox-item label,
+.radio-item label {
+    margin-bottom: 0;
+    cursor: pointer;
+    flex: 1;
+}
+
+/* Grid Layout for Multiple Columns */
+.form-row {
+    display: grid;
+    gap: var(--spacing-md);
+    grid-template-columns: 1fr;
+}
+
+/* Buttons - Touch Friendly */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    min-height: 44px;
+    min-width: 120px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-group {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+/* Signature Pad */
+.signature-pad {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    min-height: 150px;
+    background-color: white;
+    margin-top: var(--spacing-sm);
+}
+
+/* Help Text */
+.help-text {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Alert Messages */
+.alert {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-md);
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+/* Tablet Breakpoint */
+@media (min-width: 768px) {
+    body {
+        padding: var(--spacing-lg);
+    }
+
+    .container {
+        padding: 32px;
+    }
+
+    .form-header h1 {
+        font-size: 28px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-row.three-col {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .full-width {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Desktop Breakpoint */
+@media (min-width: 1024px) {
+    .form-header h1 {
+        font-size: 32px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background-color: white;
+    }
+
+    .container {
+        box-shadow: none;
+    }
+
+    .btn {
+        display: none;
+    }
+}

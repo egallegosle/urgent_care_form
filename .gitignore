@@ -1,0 +1,28 @@
+# Environment and configuration files
+config/database.php
+config/drchrono.php
+.env
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+*.Zone.Identifier
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+tmp/
+temp/
+
+# Database backups
+*.sql.backup
+*.db.backup
