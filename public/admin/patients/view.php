@@ -296,11 +296,11 @@ include __DIR__ . '/../../../includes/admin_header.php';
         </div>
         <div style="margin-top: 15px;">
             <label>Current Medications</label>
-            <p><?php echo $patient['current_medications'] ? nl2br(htmlspecialchars($patient['current_medications'])) : 'None reported'; ?></p>
+            <p><?php echo !empty($patient['current_medications'] ?? null) ? nl2br(htmlspecialchars($patient['current_medications'])) : 'None reported'; ?></p>
         </div>
         <div style="margin-top: 15px;">
             <label>Allergies</label>
-            <p><?php echo $patient['allergies'] ? nl2br(htmlspecialchars($patient['allergies'])) : 'None reported'; ?></p>
+            <p><?php echo !empty($patient['allergies'] ?? null) ? nl2br(htmlspecialchars($patient['allergies'])) : 'None reported'; ?></p>
         </div>
     </div>
 </div>
@@ -344,7 +344,7 @@ include __DIR__ . '/../../../includes/admin_header.php';
 </div>
 
 <!-- Primary Care Physician -->
-<?php if ($patient['pcp_name']): ?>
+<?php if (!empty($patient['pcp_name'] ?? null)): ?>
 <div class="dashboard-card">
     <div class="card-header">
         <h2 class="card-title"><i class="fas fa-user-md"></i> Primary Care Physician</h2>
