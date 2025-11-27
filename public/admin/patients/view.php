@@ -253,8 +253,8 @@ include __DIR__ . '/../../../includes/admin_header.php';
             <div class="full-width">
                 <label>Address</label>
                 <p>
-                    <?php echo htmlspecialchars($patient['address']); ?><br>
-                    <?php echo htmlspecialchars($patient['city']); ?>, <?php echo htmlspecialchars($patient['state']); ?> <?php echo htmlspecialchars($patient['zip_code']); ?>
+                    <?php echo htmlspecialchars($patient['address'] ?? 'Not provided'); ?><br>
+                    <?php echo htmlspecialchars($patient['city'] ?? ''); ?><?php echo ($patient['city'] ?? '') && ($patient['state'] ?? '') ? ', ' : ''; ?><?php echo htmlspecialchars($patient['state'] ?? ''); ?> <?php echo htmlspecialchars($patient['zip_code'] ?? ''); ?>
                 </p>
             </div>
         </div>
@@ -270,15 +270,15 @@ include __DIR__ . '/../../../includes/admin_header.php';
         <div class="form-grid">
             <div>
                 <label>Name</label>
-                <p><?php echo htmlspecialchars($patient['emergency_contact_name']); ?></p>
+                <p><?php echo htmlspecialchars($patient['emergency_contact_name'] ?? 'Not provided'); ?></p>
             </div>
             <div>
                 <label>Phone</label>
-                <p><a href="tel:<?php echo htmlspecialchars($patient['emergency_contact_phone']); ?>"><?php echo htmlspecialchars($patient['emergency_contact_phone']); ?></a></p>
+                <p><?php echo ($patient['emergency_contact_phone'] ?? false) ? '<a href="tel:' . htmlspecialchars($patient['emergency_contact_phone']) . '">' . htmlspecialchars($patient['emergency_contact_phone']) . '</a>' : 'Not provided'; ?></p>
             </div>
             <div>
                 <label>Relationship</label>
-                <p><?php echo htmlspecialchars($patient['emergency_relationship']); ?></p>
+                <p><?php echo htmlspecialchars($patient['emergency_relationship'] ?? 'Not specified'); ?></p>
             </div>
         </div>
     </div>
@@ -315,23 +315,23 @@ include __DIR__ . '/../../../includes/admin_header.php';
             <div class="form-grid">
                 <div>
                     <label>Insurance Provider</label>
-                    <p><?php echo htmlspecialchars($patient['insurance_provider']); ?></p>
+                    <p><?php echo htmlspecialchars($patient['insurance_provider'] ?? 'Not provided'); ?></p>
                 </div>
                 <div>
                     <label>Policy Number</label>
-                    <p><?php echo htmlspecialchars($patient['policy_number']); ?></p>
+                    <p><?php echo htmlspecialchars($patient['policy_number'] ?? 'Not provided'); ?></p>
                 </div>
                 <div>
                     <label>Group Number</label>
-                    <p><?php echo $patient['group_number'] ? htmlspecialchars($patient['group_number']) : 'Not provided'; ?></p>
+                    <p><?php echo ($patient['group_number'] ?? false) ? htmlspecialchars($patient['group_number']) : 'Not provided'; ?></p>
                 </div>
                 <div>
                     <label>Policy Holder Name</label>
-                    <p><?php echo $patient['policy_holder_name'] ? htmlspecialchars($patient['policy_holder_name']) : 'Self'; ?></p>
+                    <p><?php echo ($patient['policy_holder_name'] ?? false) ? htmlspecialchars($patient['policy_holder_name']) : 'Self'; ?></p>
                 </div>
                 <div>
                     <label>Policy Holder DOB</label>
-                    <p><?php echo $patient['policy_holder_dob'] ? date('F j, Y', strtotime($patient['policy_holder_dob'])) : 'Not provided'; ?></p>
+                    <p><?php echo ($patient['policy_holder_dob'] ?? false) ? date('F j, Y', strtotime($patient['policy_holder_dob'])) : 'Not provided'; ?></p>
                 </div>
             </div>
         <?php else: ?>
@@ -353,11 +353,11 @@ include __DIR__ . '/../../../includes/admin_header.php';
         <div class="form-grid">
             <div>
                 <label>Physician Name</label>
-                <p><?php echo htmlspecialchars($patient['pcp_name']); ?></p>
+                <p><?php echo htmlspecialchars($patient['pcp_name'] ?? 'Not provided'); ?></p>
             </div>
             <div>
                 <label>Phone</label>
-                <p><?php echo $patient['pcp_phone'] ? htmlspecialchars($patient['pcp_phone']) : 'Not provided'; ?></p>
+                <p><?php echo ($patient['pcp_phone'] ?? false) ? htmlspecialchars($patient['pcp_phone']) : 'Not provided'; ?></p>
             </div>
         </div>
     </div>
@@ -375,8 +375,8 @@ include __DIR__ . '/../../../includes/admin_header.php';
             <div>
                 <label>Smoking Status</label>
                 <p>
-                    <?php echo htmlspecialchars($medical_history['smokes']); ?>
-                    <?php if ($medical_history['smokes'] === 'Yes' && $medical_history['smoking_frequency']): ?>
+                    <?php echo htmlspecialchars($medical_history['smokes'] ?? 'Not specified'); ?>
+                    <?php if (($medical_history['smokes'] ?? '') === 'Yes' && ($medical_history['smoking_frequency'] ?? false)): ?>
                         <br><small>Frequency: <?php echo htmlspecialchars($medical_history['smoking_frequency']); ?></small>
                     <?php endif; ?>
                 </p>
@@ -384,16 +384,16 @@ include __DIR__ . '/../../../includes/admin_header.php';
             <div>
                 <label>Alcohol Consumption</label>
                 <p>
-                    <?php echo htmlspecialchars($medical_history['drinks_alcohol']); ?>
-                    <?php if ($medical_history['drinks_alcohol'] === 'Yes' && $medical_history['alcohol_frequency']): ?>
+                    <?php echo htmlspecialchars($medical_history['drinks_alcohol'] ?? 'Not specified'); ?>
+                    <?php if (($medical_history['drinks_alcohol'] ?? '') === 'Yes' && ($medical_history['alcohol_frequency'] ?? false)): ?>
                         <br><small>Frequency: <?php echo htmlspecialchars($medical_history['alcohol_frequency']); ?></small>
                     <?php endif; ?>
                 </p>
             </div>
             <div class="full-width">
                 <label>Medical Conditions</label>
-                <p><?php echo $medical_history['medical_conditions'] ? htmlspecialchars($medical_history['medical_conditions']) : 'None reported'; ?></p>
-                <?php if ($medical_history['other_conditions']): ?>
+                <p><?php echo ($medical_history['medical_conditions'] ?? false) ? htmlspecialchars($medical_history['medical_conditions']) : 'None reported'; ?></p>
+                <?php if ($medical_history['other_conditions'] ?? false): ?>
                     <p><strong>Other:</strong> <?php echo htmlspecialchars($medical_history['other_conditions']); ?></p>
                 <?php endif; ?>
             </div>
@@ -401,7 +401,7 @@ include __DIR__ . '/../../../includes/admin_header.php';
                 <label>Previous Surgeries</label>
                 <p>
                     <?php echo htmlspecialchars($medical_history['previous_surgeries'] ?? 'Not specified'); ?>
-                    <?php if ($medical_history['previous_surgeries'] === 'Yes' && $medical_history['surgery_details']): ?>
+                    <?php if (($medical_history['previous_surgeries'] ?? '') === 'Yes' && ($medical_history['surgery_details'] ?? false)): ?>
                         <br><?php echo nl2br(htmlspecialchars($medical_history['surgery_details'])); ?>
                     <?php endif; ?>
                 </p>
@@ -410,12 +410,12 @@ include __DIR__ . '/../../../includes/admin_header.php';
                 <label>Allergies</label>
                 <p>
                     <?php echo htmlspecialchars($medical_history['has_allergies'] ?? 'Not specified'); ?>
-                    <?php if ($medical_history['has_allergies'] === 'Yes' && $medical_history['allergy_details']): ?>
+                    <?php if (($medical_history['has_allergies'] ?? '') === 'Yes' && ($medical_history['allergy_details'] ?? false)): ?>
                         <br><?php echo nl2br(htmlspecialchars($medical_history['allergy_details'])); ?>
                     <?php endif; ?>
                 </p>
             </div>
-            <?php if ($medical_history['family_history']): ?>
+            <?php if ($medical_history['family_history'] ?? false): ?>
             <div class="full-width">
                 <label>Family History</label>
                 <p><?php echo nl2br(htmlspecialchars($medical_history['family_history'])); ?></p>
@@ -436,28 +436,28 @@ include __DIR__ . '/../../../includes/admin_header.php';
         <div class="form-grid">
             <div>
                 <label>Payment Method</label>
-                <p><?php echo htmlspecialchars($financial['payment_method']); ?></p>
+                <p><?php echo htmlspecialchars($financial['payment_method'] ?? 'Not specified'); ?></p>
             </div>
             <div>
                 <label>Signed By</label>
-                <p><?php echo htmlspecialchars($financial['signature_name']); ?></p>
+                <p><?php echo htmlspecialchars($financial['signature_name'] ?? 'Not provided'); ?></p>
             </div>
             <div>
                 <label>Relationship to Patient</label>
-                <p><?php echo htmlspecialchars($financial['relationship_to_patient']); ?></p>
+                <p><?php echo htmlspecialchars($financial['relationship_to_patient'] ?? 'Not specified'); ?></p>
             </div>
             <div>
                 <label>Date Signed</label>
-                <p><?php echo date('F j, Y', strtotime($financial['signature_date'])); ?></p>
+                <p><?php echo ($financial['signature_date'] ?? false) ? date('F j, Y', strtotime($financial['signature_date'])) : 'Not signed'; ?></p>
             </div>
         </div>
         <div style="margin-top: 15px;">
             <p><strong>Acknowledgments:</strong></p>
             <ul style="margin-left: 20px;">
-                <li>Read and Understood: <?php echo $financial['read_understood']; ?></li>
-                <li>Agree to Terms: <?php echo $financial['agree_to_terms']; ?></li>
-                <li>Authorize Insurance: <?php echo $financial['authorize_insurance']; ?></li>
-                <li>Responsible for Balance: <?php echo $financial['responsible_for_balance']; ?></li>
+                <li>Read and Understood: <?php echo $financial['read_understood'] ?? 'Not specified'; ?></li>
+                <li>Agree to Terms: <?php echo $financial['agree_to_terms'] ?? 'Not specified'; ?></li>
+                <li>Authorize Insurance: <?php echo $financial['authorize_insurance'] ?? 'Not specified'; ?></li>
+                <li>Responsible for Balance: <?php echo $financial['responsible_for_balance'] ?? 'Not specified'; ?></li>
             </ul>
         </div>
     </div>
@@ -474,7 +474,7 @@ include __DIR__ . '/../../../includes/admin_header.php';
         <div class="form-grid">
             <div>
                 <label>HIPAA Acknowledged</label>
-                <p><?php echo htmlspecialchars($additional['hipaa_acknowledged']); ?></p>
+                <p><?php echo htmlspecialchars($additional['hipaa_acknowledged'] ?? 'Not specified'); ?></p>
             </div>
             <div>
                 <label>Voicemail Authorization</label>
@@ -483,28 +483,28 @@ include __DIR__ . '/../../../includes/admin_header.php';
             <div>
                 <label>Patient Portal Access</label>
                 <p>
-                    <?php echo htmlspecialchars($additional['portal_access']); ?>
-                    <?php if ($additional['portal_access'] === 'Yes' && $additional['portal_email']): ?>
+                    <?php echo htmlspecialchars($additional['portal_access'] ?? 'Not specified'); ?>
+                    <?php if (($additional['portal_access'] ?? '') === 'Yes' && ($additional['portal_email'] ?? false)): ?>
                         <br><small>Email: <?php echo htmlspecialchars($additional['portal_email']); ?></small>
                     <?php endif; ?>
                 </p>
             </div>
             <div class="full-width">
                 <label>Communication Preferences</label>
-                <p><?php echo $additional['communication_preferences'] ? htmlspecialchars($additional['communication_preferences']) : 'Not specified'; ?></p>
+                <p><?php echo ($additional['communication_preferences'] ?? false) ? htmlspecialchars($additional['communication_preferences']) : 'Not specified'; ?></p>
             </div>
             <div class="full-width">
                 <label>Preferred Contact Methods</label>
-                <p><?php echo $additional['contact_methods'] ? htmlspecialchars($additional['contact_methods']) : 'Not specified'; ?></p>
+                <p><?php echo ($additional['contact_methods'] ?? false) ? htmlspecialchars($additional['contact_methods']) : 'Not specified'; ?></p>
             </div>
-            <?php if ($additional['authorized_person_name']): ?>
+            <?php if ($additional['authorized_person_name'] ?? false): ?>
             <div class="full-width">
                 <label>Authorized Person/Caregiver</label>
                 <p>
                     <strong>Name:</strong> <?php echo htmlspecialchars($additional['authorized_person_name']); ?><br>
-                    <strong>Relationship:</strong> <?php echo htmlspecialchars($additional['authorized_person_relation']); ?><br>
-                    <strong>Phone:</strong> <?php echo htmlspecialchars($additional['authorized_person_phone']); ?><br>
-                    <strong>Authorized to Discuss:</strong> <?php echo htmlspecialchars($additional['authorize_discussion']); ?>
+                    <strong>Relationship:</strong> <?php echo htmlspecialchars($additional['authorized_person_relation'] ?? 'Not specified'); ?><br>
+                    <strong>Phone:</strong> <?php echo htmlspecialchars($additional['authorized_person_phone'] ?? 'Not provided'); ?><br>
+                    <strong>Authorized to Discuss:</strong> <?php echo htmlspecialchars($additional['authorize_discussion'] ?? 'Not specified'); ?>
                 </p>
             </div>
             <?php endif; ?>
