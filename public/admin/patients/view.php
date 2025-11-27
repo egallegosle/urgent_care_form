@@ -221,11 +221,11 @@ include __DIR__ . '/../../../includes/admin_header.php';
             </div>
             <div>
                 <label>SSN</label>
-                <p><?php echo $patient['ssn'] ? htmlspecialchars($patient['ssn']) : 'Not provided'; ?></p>
+                <p><?php echo !empty($patient['ssn'] ?? null) ? htmlspecialchars($patient['ssn']) : 'Not provided'; ?></p>
             </div>
             <div>
                 <label>Marital Status</label>
-                <p><?php echo $patient['marital_status'] ? htmlspecialchars($patient['marital_status']) : 'Not specified'; ?></p>
+                <p><?php echo !empty($patient['marital_status'] ?? null) ? htmlspecialchars($patient['marital_status']) : 'Not specified'; ?></p>
             </div>
         </div>
     </div>
@@ -248,7 +248,7 @@ include __DIR__ . '/../../../includes/admin_header.php';
             </div>
             <div>
                 <label>Home Phone</label>
-                <p><?php echo $patient['home_phone'] ? htmlspecialchars($patient['home_phone']) : 'Not provided'; ?></p>
+                <p><?php echo !empty($patient['home_phone'] ?? null) ? htmlspecialchars($patient['home_phone']) : 'Not provided'; ?></p>
             </div>
             <div class="full-width">
                 <label>Address</label>
