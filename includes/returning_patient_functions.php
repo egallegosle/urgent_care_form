@@ -14,23 +14,27 @@
  * @return array ['allowed' => bool, 'remaining' => int, 'blocked_until' => string|null]
  */
 function checkRateLimit($conn, $ip_address, $max_attempts = 5, $time_window = 15) {
-    // Call stored procedure if it exists, otherwise use manual check
-    $stmt = $conn->prepare("CALL check_rate_limit(?, ?, ?, @allowed, @remaining)");
+    // Try stored procedure first, fall back to manual check if it doesn't exist
+    try {
+        $stmt = $conn->prepare("CALL check_rate_limit(?, ?, ?, @allowed, @remaining)");
 
-    if ($stmt) {
-        $stmt->bind_param("sii", $ip_address, $max_attempts, $time_window);
-        $stmt->execute();
-        $stmt->close();
+        if ($stmt) {
+            $stmt->bind_param("sii", $ip_address, $max_attempts, $time_window);
+            $stmt->execute();
+            $stmt->close();
 
-        // Get output parameters
-        $result = $conn->query("SELECT @allowed as allowed, @remaining as remaining");
-        $data = $result->fetch_assoc();
+            // Get output parameters
+            $result = $conn->query("SELECT @allowed as allowed, @remaining as remaining");
+            $data = $result->fetch_assoc();
 
-        return [
-            'allowed' => (bool)$data['allowed'],
-            'remaining' => (int)$data['remaining'],
-            'blocked_until' => null
-        ];
+            return [
+                'allowed' => (bool)$data['allowed'],
+                'remaining' => (int)$data['remaining'],
+                'blocked_until' => null
+            ];
+        }
+    } catch (Exception $e) {
+        // Stored procedure doesn't exist, use fallback
     }
 
     // Fallback: Manual rate limit check
