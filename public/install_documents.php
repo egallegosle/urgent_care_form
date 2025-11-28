@@ -160,7 +160,7 @@ $ALLOW_REINSTALL = false; // Set to true if you want to run again
 
         <?php
         // Check if already installed
-        require_once 'config/database.php';
+        require_once '../config/database.php';
         $conn = getDBConnection();
 
         $tables_exist = false;
