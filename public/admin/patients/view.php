@@ -4,6 +4,7 @@
  */
 require_once __DIR__ . '/../../../config/database.php';
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/document_functions.php';
 
 requireAuth();
 
@@ -74,6 +75,9 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $patient_id);
 $stmt->execute();
 $status = $stmt->get_result()->fetch_assoc();
+
+// Get patient documents
+$patient_documents = getPatientDocuments($conn, $patient_id);
 
 $page_title = 'Patient Details - ' . $patient['full_name'];
 include __DIR__ . '/../../../includes/admin_header.php';
@@ -513,6 +517,135 @@ include __DIR__ . '/../../../includes/admin_header.php';
 </div>
 <?php endif; ?>
 
+<!-- Patient Documents Section -->
+<div class="dashboard-card">
+    <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-file-medical"></i> Uploaded Documents</h2>
+        <span class="badge <?php echo count($patient_documents) > 0 ? 'badge-success' : 'badge-secondary'; ?>">
+            <?php echo count($patient_documents); ?> Document<?php echo count($patient_documents) != 1 ? 's' : ''; ?>
+        </span>
+    </div>
+    <div class="card-body">
+        <?php if (count($patient_documents) > 0): ?>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Document Type</th>
+                            <th>Filename</th>
+                            <th>Size</th>
+                            <th>Uploaded</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($patient_documents as $doc): ?>
+                        <tr>
+                            <td>
+                                <i class="fas fa-<?php echo $doc['document_category'] === 'insurance' ? 'id-card' : ($doc['document_category'] === 'identification' ? 'id-badge' : 'file-medical'); ?>"></i>
+                                <?php echo htmlspecialchars(getDocumentTypeLabel($doc['document_type'])); ?>
+                            </td>
+                            <td>
+                                <span title="<?php echo htmlspecialchars($doc['original_filename']); ?>">
+                                    <?php
+                                    $filename = $doc['original_filename'];
+                                    echo htmlspecialchars(strlen($filename) > 30 ? substr($filename, 0, 27) . '...' : $filename);
+                                    ?>
+                                </span>
+                            </td>
+                            <td><?php echo formatFileSize($doc['file_size']); ?></td>
+                            <td><?php echo date('M j, Y g:i A', strtotime($doc['upload_date'])); ?></td>
+                            <td><?php echo getStatusBadge($doc['status']); ?></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="../documents/view_document.php?id=<?php echo $doc['document_id']; ?>"
+                                       target="_blank"
+                                       class="btn btn-sm btn-primary"
+                                       title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="../documents/view_document.php?id=<?php echo $doc['document_id']; ?>&download=1"
+                                       class="btn btn-sm btn-secondary"
+                                       title="Download">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <?php if ($doc['status'] === 'pending'): ?>
+                                    <button onclick="verifyDocument(<?php echo $doc['document_id']; ?>)"
+                                            class="btn btn-sm btn-success"
+                                            title="Verify">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button onclick="rejectDocument(<?php echo $doc['document_id']; ?>)"
+                                            class="btn btn-sm btn-warning"
+                                            title="Reject">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <?php endif; ?>
+                                    <button onclick="deleteDocument(<?php echo $doc['document_id']; ?>)"
+                                            class="btn btn-sm btn-danger"
+                                            title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <?php
+            // Show summary
+            $pending_count = 0;
+            $verified_count = 0;
+            $rejected_count = 0;
+            foreach ($patient_documents as $doc) {
+                if ($doc['status'] === 'pending') $pending_count++;
+                if ($doc['status'] === 'verified') $verified_count++;
+                if ($doc['status'] === 'rejected') $rejected_count++;
+            }
+            ?>
+
+            <div class="info-grid" style="margin-top: 20px;">
+                <?php if ($pending_count > 0): ?>
+                <div class="info-item">
+                    <i class="fas fa-clock" style="color: #f59e0b;"></i>
+                    <div>
+                        <div class="info-label">Pending Verification</div>
+                        <div class="info-value"><?php echo $pending_count; ?></div>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <?php if ($verified_count > 0): ?>
+                <div class="info-item">
+                    <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                    <div>
+                        <div class="info-label">Verified</div>
+                        <div class="info-value"><?php echo $verified_count; ?></div>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <?php if ($rejected_count > 0): ?>
+                <div class="info-item">
+                    <i class="fas fa-times-circle" style="color: #ef4444;"></i>
+                    <div>
+                        <div class="info-label">Rejected</div>
+                        <div class="info-value"><?php echo $rejected_count; ?></div>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <div class="empty-state">
+                <i class="fas fa-file-upload" style="font-size: 48px; color: #cbd5e0; margin-bottom: 15px;"></i>
+                <p>No documents uploaded yet.</p>
+                <small>Documents can be uploaded during patient registration or added later.</small>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
 <!-- Admin Notes -->
 <div class="dashboard-card">
     <div class="card-header">
@@ -592,6 +725,84 @@ document.getElementById('notesForm').addEventListener('submit', function(e) {
         }
     });
 });
+
+// Document management functions
+function verifyDocument(documentId) {
+    if (!confirm('Verify this document?')) return;
+
+    fetch('../documents/manage.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({
+            action: 'verify',
+            document_id: documentId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            AdminUtils.showAlert('Document verified successfully', 'success');
+            location.reload();
+        } else {
+            AdminUtils.showAlert('Failed to verify document: ' + (data.error || 'Unknown error'), 'error');
+        }
+    })
+    .catch(error => {
+        AdminUtils.showAlert('Network error occurred', 'error');
+    });
+}
+
+function rejectDocument(documentId) {
+    const reason = prompt('Enter rejection reason:');
+    if (!reason) return;
+
+    fetch('../documents/manage.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({
+            action: 'reject',
+            document_id: documentId,
+            reason: reason
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            AdminUtils.showAlert('Document rejected', 'success');
+            location.reload();
+        } else {
+            AdminUtils.showAlert('Failed to reject document: ' + (data.error || 'Unknown error'), 'error');
+        }
+    })
+    .catch(error => {
+        AdminUtils.showAlert('Network error occurred', 'error');
+    });
+}
+
+function deleteDocument(documentId) {
+    if (!confirm('Are you sure you want to delete this document? This action cannot be undone.')) return;
+
+    fetch('../documents/manage.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({
+            action: 'delete',
+            document_id: documentId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            AdminUtils.showAlert('Document deleted successfully', 'success');
+            location.reload();
+        } else {
+            AdminUtils.showAlert('Failed to delete document: ' + (data.error || 'Unknown error'), 'error');
+        }
+    })
+    .catch(error => {
+        AdminUtils.showAlert('Network error occurred', 'error');
+    });
+}
 </script>
 
 <?php

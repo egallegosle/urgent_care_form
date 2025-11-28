@@ -32,6 +32,7 @@ function getValue($patient_data, $field, $default = '') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Registration - PrimeHealth Urgent Care</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/document_upload.css">
     <style>
         .returning-patient-banner {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -445,6 +446,97 @@ function getValue($patient_data, $field, $default = '') {
                 </div>
             </div>
 
+            <!-- Document Upload Section -->
+            <div class="form-section">
+                <div class="document-upload-section">
+                    <h3>
+                        📎 Upload Insurance Card & Photo ID
+                        <span class="optional-badge">Optional</span>
+                    </h3>
+                    <p>Upload images of your insurance card and photo ID to speed up processing. You can also provide these at check-in.</p>
+
+                    <div class="upload-areas">
+                        <!-- Insurance Card Front -->
+                        <div class="upload-area" id="insurance-card-front-upload">
+                            <input type="file" class="file-input" accept="image/*,.pdf" aria-label="Upload insurance card front">
+                            <div class="upload-icon">📄</div>
+                            <span class="upload-label">Insurance Card (Front)</span>
+                            <span class="upload-hint">Click or drag to upload</span>
+                            <span class="upload-formats">JPG, PNG, or PDF • Max 5MB</span>
+                            <button type="button" class="upload-btn">
+                                <span>Choose File</span>
+                            </button>
+                            <div class="upload-progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <div class="upload-status"></div>
+                            <div class="file-preview"></div>
+                        </div>
+
+                        <!-- Insurance Card Back -->
+                        <div class="upload-area" id="insurance-card-back-upload">
+                            <input type="file" class="file-input" accept="image/*,.pdf" aria-label="Upload insurance card back">
+                            <div class="upload-icon">📄</div>
+                            <span class="upload-label">Insurance Card (Back)</span>
+                            <span class="upload-hint">Click or drag to upload</span>
+                            <span class="upload-formats">JPG, PNG, or PDF • Max 5MB</span>
+                            <button type="button" class="upload-btn">
+                                <span>Choose File</span>
+                            </button>
+                            <div class="upload-progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <div class="upload-status"></div>
+                            <div class="file-preview"></div>
+                        </div>
+
+                        <!-- Photo ID Front -->
+                        <div class="upload-area" id="photo-id-front-upload">
+                            <input type="file" class="file-input" accept="image/*,.pdf" aria-label="Upload photo ID front">
+                            <div class="upload-icon">🪪</div>
+                            <span class="upload-label">Photo ID (Front)</span>
+                            <span class="upload-hint">Driver's license, passport, etc.</span>
+                            <span class="upload-formats">JPG, PNG, or PDF • Max 5MB</span>
+                            <button type="button" class="upload-btn">
+                                <span>Choose File</span>
+                            </button>
+                            <div class="upload-progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <div class="upload-status"></div>
+                            <div class="file-preview"></div>
+                        </div>
+
+                        <!-- Photo ID Back (optional) -->
+                        <div class="upload-area" id="photo-id-back-upload">
+                            <input type="file" class="file-input" accept="image/*,.pdf" aria-label="Upload photo ID back">
+                            <div class="upload-icon">🪪</div>
+                            <span class="upload-label">Photo ID (Back)</span>
+                            <span class="upload-hint">If applicable</span>
+                            <span class="upload-formats">JPG, PNG, or PDF • Max 5MB</span>
+                            <button type="button" class="upload-btn">
+                                <span>Choose File</span>
+                            </button>
+                            <div class="upload-progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <div class="upload-status"></div>
+                            <div class="file-preview"></div>
+                        </div>
+                    </div>
+
+                    <div class="upload-help">
+                        <p><strong>Tips for best results:</strong></p>
+                        <ul>
+                            <li>Ensure the entire card/ID is visible and in focus</li>
+                            <li>Avoid glare or shadows - use good lighting</li>
+                            <li>Make sure all text is readable</li>
+                            <li>Take photos against a dark background for better contrast</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Primary Care Physician Section -->
             <div class="form-section">
                 <h2>Primary Care Physician</h2>
@@ -592,5 +684,8 @@ function getValue($patient_data, $field, $default = '') {
         });
         <?php endif; ?>
     </script>
+
+    <!-- Document Upload JavaScript -->
+    <script src="../js/document_upload.js"></script>
 </body>
 </html>
